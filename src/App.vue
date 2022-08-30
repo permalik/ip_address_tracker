@@ -1,5 +1,7 @@
-<script></script>
+<template>
+  <router-view />
+</template>
 
-<template>Home</template>
+<script>
 
-<style scoped></style>
+</script>

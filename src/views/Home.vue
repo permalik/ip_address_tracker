@@ -1,14 +1,22 @@
 <template>
-  <main>
-    <h1>IP Address Tracker</h1>
-    <input placeholder="Input IP Address" type="text" v-model="findIP" />
-    <button @click="getInfo">X</button>
-    <Info v-bind:info="info" v-if="info" />
-  </main>
-  <div>
-    <div id="ipMap"></div>
+  <div class="container">
+    <main>
+      <h1>IP Address Tracker</h1>
+      <input placeholder="Input IP Address" type="text" v-model="findIP" />
+      <button @click="getInfo">X</button>
+      <Info v-bind:info="info" v-if="info" />
+    </main>
+    <div>
+      <div id="ipMap"></div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+
+}
+</style>
 
 <script>
 import Info from "../components/Info.vue";

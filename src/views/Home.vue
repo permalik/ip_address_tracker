@@ -73,14 +73,7 @@ export default {
         };
         mapComponent.setView([info.value.lat, info.value.lng], 10);
         marker.setLatLng([info.value.lat, info.value.lng]);
-        popup = leaflet.popup().setLatLng([info.value.lat, info.value.lng]).setContent(`${info.value.city}, ${info.value.state}`);
-        marker.bindPopup(popup);
-        marker.on("mouseover", function(event) {
-          marker.openPopup();
-        });
-        marker.on("mouseout", function(event) {
-          marker.closePopup();
-        });
+        popup.setLatLng([info.value.lat, info.value.lng]).setContent(`${info.value.city}, ${info.value.state}`);
 
       } catch (error) {
         alert("Invalid IP");

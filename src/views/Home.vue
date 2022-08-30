@@ -63,9 +63,6 @@ export default {
         };
         mapComponent.setView([info.value.lat, info.value.lng], 10);
         marker.setLatLng([info.value.lat, info.value.lng]);
-        // marker.on("mouseover", function (ev) {
-        //   marker.openPopup();
-        // });
       } catch (error) {
         alert("Invalid IP");
       }
@@ -80,22 +77,3 @@ export default {
   height: 80vh;
 }
 </style>
-// await axios(`https://geo.ipify.org/api/v2/country,city?apiKey=at_Qj8nFi0OaT5ACiI2ySdWdTdl3ULkk&ipAddress=${findIP.value}`, {
-//   method: "GET",
-//   mode: "no-cors",
-//   headers: {
-//     "Content-Type": "application/json"
-//   }
-// }).then(function(response) {
-//   const result = response.data;
-//   info.value = {
-//     address: result.ip,
-//     isp: result.isp,
-//     lat: result.location.lat,
-//     lng: result.location.lng,
-//     region: result.region,
-//     timezone: result.location.timezone
-//   };
-//   leaflet.marker([info.value.lat, info.value.lng]).addTo(mapComponent);
-//   mapComponent.setView([info.value.lat, info.value.lng], 10);
-// })

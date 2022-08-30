@@ -6,7 +6,7 @@
     </div>
     <div>
       <h2>Region</h2>
-      <p>{{info.region}}</p>
+      <p>{{info.city}}, {{info.state}}</p>
     </div>
     <div>
       <h2>Timezone</h2>

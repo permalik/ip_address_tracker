@@ -31,6 +31,7 @@ export default {
   setup() {
     let mapComponent;
     let marker;
+    let popup;
     const findIP = ref("");
     const info = ref(null);
     const tileURL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -38,6 +39,14 @@ export default {
     onMounted(() => {
       mapComponent = leaflet.map("ipMap").setView([37.3230, -122.0322], 10);
       marker = leaflet.marker([37.3230, -122.0322]).addTo(mapComponent);
+      popup = leaflet.popup().setLatLng([37.3230, -122.0322]).setContent('Cupertino, California');
+      marker.bindPopup(popup);
+      marker.on("mouseover", function(event) {
+        marker.openPopup();
+      });
+      marker.on("mouseout", function(event) {
+        marker.closePopup();
+      });
       leaflet.tileLayer(
         tileURL,
         {
@@ -55,14 +64,24 @@ export default {
         const result = data.data;
         info.value = {
           address: result.ip,
+          city: result.location.city,
           isp: result.isp,
           lat: result.location.lat,
           lng: result.location.lng,
-          region: result.region,
+          state: result.location.region,
           timezone: result.location.timezone
         };
         mapComponent.setView([info.value.lat, info.value.lng], 10);
         marker.setLatLng([info.value.lat, info.value.lng]);
+        popup = leaflet.popup().setLatLng([info.value.lat, info.value.lng]).setContent(`${info.value.city}, ${info.value.state}`);
+        marker.bindPopup(popup);
+        marker.on("mouseover", function(event) {
+          marker.openPopup();
+        });
+        marker.on("mouseout", function(event) {
+          marker.closePopup();
+        });
+
       } catch (error) {
         alert("Invalid IP");
       }

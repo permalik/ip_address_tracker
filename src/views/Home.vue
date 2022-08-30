@@ -30,12 +30,14 @@ export default {
   components: { Info },
   setup() {
     let mapComponent;
+    let marker;
     const findIP = ref("");
     const info = ref(null);
     const tileURL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
     const attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
     onMounted(() => {
       mapComponent = leaflet.map("ipMap").setView([37.3230, -122.0322], 10);
+      marker = leaflet.marker([37.3230, -122.0322]).addTo(mapComponent);
       leaflet.tileLayer(
         tileURL,
         {
@@ -59,8 +61,11 @@ export default {
           region: result.region,
           timezone: result.location.timezone
         };
-        leaflet.marker([info.value.lat, info.value.lng]).addTo(mapComponent);
         mapComponent.setView([info.value.lat, info.value.lng], 10);
+        marker.setLatLng([info.value.lat, info.value.lng]);
+        // marker.on("mouseover", function (ev) {
+        //   marker.openPopup();
+        // });
       } catch (error) {
         alert("Invalid IP");
       }

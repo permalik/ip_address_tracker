@@ -110,10 +110,13 @@ export default {
         );
         let result = data.data;
         initialInfo = {
+          address: result.ip,
           city: result.location.city,
+          isp: result.isp,
           lat: result.location.lat,
           lng: result.location.lng,
-          state: result.location.region
+          state: result.location.region,
+          timezone: result.location.timezone,
         };
         initialCity = initialInfo.city;
         initialLat = initialInfo.lat;

@@ -1,20 +1,70 @@
 <template>
   <div class="container">
     <main>
-      <h1>IP Address Tracker</h1>
-      <input placeholder="Input IP Address" type="text" v-model="findIP" />
-      <button @click="getInfo">X</button>
-      <Info v-bind:info="info" v-if="info" />
+      <header>
+        <h1>IP Address Tracker</h1>
+        <div class="searchbar">
+          <input placeholder="Search for any IP address or domain" type="text"
+                 v-model="findIP" />
+          <button @click="getInfo">
+            <img alt="chevron-right" src="/chevron-right.svg" />
+          </button>
+        </div>
+        <Info v-bind:info="info" v-if="info" />
+      </header>
+      <div>
+        <div id="ipMap"></div>
+      </div>
     </main>
-    <div>
-      <div id="ipMap"></div>
-    </div>
   </div>
 </template>
 
 <style scoped>
-.container {
+header {
+  align-items: center;
+  background-image: url("/pattern-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 30vh;
+  justify-content: center;
+  position: relative;
+}
 
+h1 {
+  margin-block-end: var(--margin-bottom);
+}
+
+.searchbar {
+  align-items: center;
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  margin-block-end: var(--margin-bottom);
+  min-width: 350px;
+  width: 40%;
+}
+
+input {
+  border: none;
+  border-radius: 15px 0 0 15px;
+  font-size: clamp(15px, 1.5vw, 1.25em);
+  height: inherit;
+  padding: 10px 25px;
+  width: 100%;
+}
+
+button {
+  background: var(--grey-900);
+  border: none;
+  border-radius: 0 15px 15px 0;
+  height: inherit;
+  width: 60px;
+}
+
+#ipMap {
+  height: 70vh;
 }
 </style>
 
@@ -33,18 +83,19 @@ export default {
     let popup;
     let initialLat;
     let initialLng;
+    let initialCity;
+    let initialState;
     let initialIP;
     let initialInfo;
     const findIP = ref("");
     const info = ref(null);
     const tileURL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
     const attribution =
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+      "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
     const getInitialIP = async () => {
       try {
         const ipData = await axios.get("https://api.ipify.org?format=json");
         initialIP = ipData.data.ip;
-        console.log(initialIP);
         return initialIP;
       } catch (e) {
         console.log(e);
@@ -57,20 +108,23 @@ export default {
         const data = await axios.get(
           `https://geo.ipify.org/api/v2/country,city?apiKey=at_Qj8nFi0OaT5ACiI2ySdWdTdl3ULkk&ipAddress=${ip}`
         );
-        console.log(data.data);
         let result = data.data;
         initialInfo = {
+          city: result.location.city,
           lat: result.location.lat,
-          lng: result.location.lng
+          lng: result.location.lng,
+          state: result.location.region
         };
+        initialCity = initialInfo.city;
         initialLat = initialInfo.lat;
         initialLng = initialInfo.lng;
+        initialState = initialInfo.state;
         let location = {
+          city: initialCity,
           lat: initialLat,
-          lng: initialLng
+          lng: initialLng,
+          state: initialState
         };
-        console.log(initialLat);
-        console.log(initialLng);
         return location;
       } catch (error) {
         console.log(error);
@@ -78,15 +132,17 @@ export default {
     };
     onMounted(async () => {
       let initialLocation = await getInitialLocation();
-      let lat, lng;
+      let city, lat, lng, state;
+      city = initialLocation.city;
       lat = initialLocation.lat;
       lng = initialLocation.lng;
+      state = initialLocation.state;
       mapComponent = leaflet.map("ipMap").setView([lat, lng], 10);
       marker = leaflet.marker([lat, lng]).addTo(mapComponent);
       popup = leaflet
         .popup()
         .setLatLng([lat, lng])
-        .setContent("Cupertino, California");
+        .setContent(`${city}, ${state}`);
       marker.bindPopup(popup);
       marker.on("mouseover", function() {
         marker.openPopup();
@@ -128,9 +184,3 @@ export default {
   }
 };
 </script>
-
-<style>
-#ipMap {
-  height: 80vh;
-}
-</style>

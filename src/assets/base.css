@@ -1,3 +1,17 @@
+:root {
+  --color: #FFFFFF;
+
+  --grey-500: hsl(0, 0%, 59%);
+  --grey-900: hsl(0, 0%, 17%);
+
+  --fontsize: 18px;
+  --fontweight-light: 400;
+  --fontweight-medium: 500;
+  --fontweight-dark: 700;
+
+  --margin-bottom: 1em;
+}
+
 *,
 *::before,
 *::after {
@@ -8,7 +22,9 @@
 }
 
 body {
-  min-height: 100vh;
-  color: black;
   background: white;
+  min-height: 100vh;
+  color: var(--color);
+  font-family: 'Rubik', sans-serif;
+  font-size: var(--fontsize);
 }
